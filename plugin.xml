@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://cordova.apache.org/ns/plugins/1.0"
-        id="org.eazy.cordova.plugin.powermanagement"
+        id="org.eazy.cordova.powermanagement"
         version="0.0.1">
     <name>PowerManagement</name>
     <description>Power-management functionality (e.g. wake lock)</description>
