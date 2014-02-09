@@ -27,7 +27,7 @@
 /**
  * Interface which does the actual handling
  */
-@interface PowerManagement :CDVPlugin {    
+@interface PowerManagement : CDVPlugin {    
 }
 /**
  * Sets the idleTimerDisable property to true so that the idle timeout is disabled

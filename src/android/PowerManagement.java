@@ -18,7 +18,7 @@
  * Cordova (Android) plugin for accessing the power-management functions of the device
  * @author Wolfgang Koller <viras@users.sourceforge.net>
  */
-package org.apache.cordova.powermanagement;
+package org.eazy.cordova.plugin;
 
 import org.json.JSONArray;
 import org.json.JSONException;

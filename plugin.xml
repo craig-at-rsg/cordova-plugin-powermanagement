@@ -1,37 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://cordova.apache.org/ns/plugins/1.0"
-        id="at.gofg.sportscomputer.powermanagement"
-        version="1.0.0">
+        id="org.eazy.cordova.plugin.powermanagement"
+        version="0.0.1">
     <name>PowerManagement</name>
-    <description>PowerManagement plugin for Cordova</description>
+    <description>Power-management functionality (e.g. wake lock)</description>
     <license>Apache 2.0</license>
-    <keywords>cordova,powermanagement</keywords>
+    <keywords>cordova,powermanagement,power management,screen,wake,dim,lock</keywords>
 
-    <js-module src="www/powermanagement.js" name="device">
-        <clobbers target="window.powerManagement" />
+    <js-module src="www/powermanagement.js" name="PowerManagement">
+        <clobbers target="powerManagement" />
     </js-module>
-
-    <!-- wp7 -->
-    <platform name="wp7">
-        <config-file target="config.xml" parent="/*">
-            <feature name="PowerManagement">
-                <param name="wp-package" value="PowerManagement"/>
-            </feature>
-        </config-file>
-
-        <source-file src="src/wp/PowerManagement.cs" />
-    </platform>
-
-    <!-- wp8 -->
-    <platform name="wp8">
-        <config-file target="config.xml" parent="/*">
-            <feature name="PowerManagement">
-                <param name="wp-package" value="PowerManagement"/>
-            </feature>
-        </config-file>
-
-        <source-file src="src/wp/PowerManagement.cs" />
-    </platform>
 
     <!-- ios -->
     <platform name="ios">            
@@ -49,7 +27,7 @@
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="PowerManagement" >
-                <param name="android-package" value="org.apache.cordova.powermanagement.PowerManagement"/>
+                <param name="android-package" value="org.eazy.cordova.plugin.PowerManagement"/>
             </feature>
         </config-file>
 
@@ -57,6 +35,17 @@
             <uses-permission android:name="android.permission.WAKE_LOCK" />
         </config-file>
 
-        <source-file src="src/android/PowerManagement.java" target-dir="src/org/apache/cordova/powermanagement"/ />
+        <source-file src="src/android/PowerManagement.java" target-dir="src/org/eazy/cordova/plugin" />
+    </platform>
+
+    <!-- wp8 -->
+    <platform name="wp8">
+        <config-file target="config.xml" parent="/*">
+            <feature name="PowerManagement">
+                <param name="wp-package" value="PowerManagement"/>
+            </feature>
+        </config-file>
+
+        <source-file src="src/wp/PowerManagement.cs" />
     </platform>
 </plugin>
