@@ -23,7 +23,7 @@
  * Actual implementation of the interface
  */
 @implementation PowerManagement
-- (void) acquire:(CDVInvokedUrlCommand*)command
+- (void) wakeLock:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* result = nil;
     NSString* jsString = nil;
@@ -32,41 +32,56 @@
     // Acquire a reference to the local UIApplication singleton
     UIApplication* app = [UIApplication sharedApplication];
     
-    if( ![app isIdleTimerDisabled] ) {
-        [app setIdleTimerDisabled:true];
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-        jsString = [result toSuccessCallbackString:callbackId];
+    // first command argument is whether to acquire or release the wake lock;
+    // second argument is whether to dim the screen on wake-lock - not directly supported by iOS
+    BOOL acquireLock = [[command.arguments objectAtIndex:0] boolValue];
+    
+    if (acquireLock) {
+        if(![app isIdleTimerDisabled]) {
+            [app setIdleTimerDisabled:true];
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+            jsString = [result toSuccessCallbackString:callbackId];
+        }
+        else {
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ILLEGAL_ACCESS_EXCEPTION messageAsString:@"IdleTimer already disabled"];
+            jsString = [result toErrorCallbackString:callbackId];
+        }
     }
     else {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ILLEGAL_ACCESS_EXCEPTION messageAsString:@"IdleTimer already disabled"];
-        jsString = [result toErrorCallbackString:callbackId];
+        if([app isIdleTimerDisabled]) {
+            [app setIdleTimerDisabled:false];
+
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+            jsString = [result toSuccessCallbackString:callbackId];
+        }
+        else {
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ILLEGAL_ACCESS_EXCEPTION messageAsString:@"IdleTimer not disabled"];
+            jsString = [result toErrorCallbackString:callbackId];
+        }
     }
     
     [self writeJavascript:jsString];
 }
 
-
-- (void) release:(CDVInvokedUrlCommand*)command
-{    
+- (void) dimScreen:(CDVInvokedUrlCommand*)command
+{
     CDVPluginResult* result = nil;
-    NSString* jsString = nil;
     NSString* callbackId = command.callbackId;
+
+    // enable "software dimming" so we can go as dark as possible
+    [[UIScreen mainScreen] setWantsSoftwareDimming:YES];
     
-    // Acquire a reference to the local UIApplication singleton
-    UIApplication* app = [UIApplication sharedApplication];
+    // save the current brightness level to report to caller
+    CGFloat currentBrightness = [[UIScreen mainScreen] brightness];
     
-    if( [app isIdleTimerDisabled] ) {
-        [app setIdleTimerDisabled:false];
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-        jsString = [result toSuccessCallbackString:callbackId];
-    }
-    else {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ILLEGAL_ACCESS_EXCEPTION messageAsString:@"IdleTimer not disabled"];
-        jsString = [result toErrorCallbackString:callbackId];
-    }
+    // dim to the specified brightness value
+    CGFloat newBrightness = [[command.arguments objectAtIndex:0] doubleValue];
+    [[UIScreen mainScreen] setBrightness: newBrightness];
     
-    [self writeJavascript:jsString];
+    // return the brightness level pre-dimming
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDouble:currentBrightness];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 @end

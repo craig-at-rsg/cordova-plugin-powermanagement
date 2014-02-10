@@ -30,13 +30,13 @@
 @interface PowerManagement : CDVPlugin {    
 }
 /**
- * Sets the idleTimerDisable property to true so that the idle timeout is disabled
+ * Sets/unsets the idleTimerDisable property to enable/disable shutting off the device on idle.
  */
-- (void) acquire:(CDVInvokedUrlCommand*)command;
+- (void) wakeLock:(CDVInvokedUrlCommand*)command;
 
 /**
- * Sets the idleTimerDisable property to false so that the idle timeout is enabled
+ * Dims the brightness of the screen to the specified level.
  */
-- (void) release:(CDVInvokedUrlCommand*)command;
+- (void) dimScreen:(CDVInvokedUrlCommand*)command;
 
 @end
