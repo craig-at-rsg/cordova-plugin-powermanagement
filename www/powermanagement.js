@@ -18,20 +18,39 @@ var PowerManagement = function() {};
 /**
  * Acquire or release a wake-lock (prevents the screen and CPU of the device from switching off).
  *
- * @param acquire If true, acquires a wake-lock; else releases a previously-acquired lock. Defaults to true.
- * @param allowDimming If true, let's the screen/keyboard dim on devices which support this feature. Defaults to false. Ignored when releasing a lock.
- * @param successCallback Function called when the wake-lock was acquired successfully.
- * @param errorCallback Function called when there was a problem with acquiring the wake-lock.
+ * Additionally, for platforms that support it, this method specifies whether the screen can be dimmed
+ * on user idle after a wake-lock is acquired (according to the normal dimming behaviour for the platform).
+ *
+ * @param {bool} acquire - If true, acquires a wake-lock; if false, releases a previously-acquired lock.
+ * @param {bool} [allowDimming=false] - Valid only on platforms which support this feature. If true, lets the 
+ *			screen/keyboard dim according to the platform's normal dimming behaviour on idle after acquiring a wake-lock. 
+ *			Defaults to false. 
+ *			This parameter has no effect when the lock is being released, or where platforms don't support it.
+ * @param successCallback - Function called when the wake-lock was acquired successfully.
+ * @param errorCallback - Function called when there was a problem with acquiring the wake-lock.
  */
-PowerManagement.prototype.wakeLock = function(acquire, allowDimming, successCallback, failureCallback) {
-	if( typeof acquire === "undefined" ) acquire = true;
-	if( typeof allowDimming === "undefined" ) allowDimming = false;
+PowerManagement.prototype.setWakeLock = function(acquire, allowDimming, successCallback, failureCallback) {
+	if(typeof allowDimming === "undefined") allowDimming = false;
 
-    cordova.exec(successCallback, failureCallback, 'PowerManagement', 'wakeLock', [acquire, allowDimming]);
+	cordova.exec(successCallback, failureCallback, 'PowerManagement', 'setWakeLock', [acquire, allowDimming]);
 }
 
-PowerManagement.prototype.dimScreen = function(brightness, successCallback, failureCallback) {
-    cordova.exec(successCallback, failureCallback, 'PowerManagement', 'dimScreen', [brightness]);
+/**
+ * Manually sets the brightness level of the screen on a scale of 0.0 to 1.0.
+ *
+ * It is the responsibility of the caller (or OS) to restore brightness levels at the appropriate times 
+ * (e.g.when quitting the app). [Note: though iOS documentation states that system brightness will be 
+ * automatically restored, it appears that due to buggy implementation this does not in fact happen.]
+ *
+ * @param {float} The level of brightness to set the screen to, where 0.0 is the dimmest possible 
+			level supported on the device (both at hardware level and with software overlay), and 1.0
+			is the brightest level supported on the device.
+ * @param successCallback Function called when the brightness level has been successfully set.
+ * @param errorCallback Function called when there was a problem setting the brightness level.
+ * @returns {float} The brightness level setting before the specified value was applied.
+ */
+PowerManagement.prototype.setBrightness = function (brightness, successCallback, failureCallback) {
+	cordova.exec(successCallback, failureCallback, 'PowerManagement', 'setBrightness', [brightness]);
 }
 
 module.exports = new PowerManagement();

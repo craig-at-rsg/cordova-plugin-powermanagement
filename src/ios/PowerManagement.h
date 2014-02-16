@@ -32,11 +32,11 @@
 /**
  * Sets/unsets the idleTimerDisable property to enable/disable shutting off the device on idle.
  */
-- (void) wakeLock:(CDVInvokedUrlCommand*)command;
+- (void) setWakeLock:(CDVInvokedUrlCommand*)command;
 
 /**
  * Dims the brightness of the screen to the specified level.
  */
-- (void) dimScreen:(CDVInvokedUrlCommand*)command;
+- (void) setBrightness:(CDVInvokedUrlCommand*)command;
 
 @end

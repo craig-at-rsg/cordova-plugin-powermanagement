@@ -23,7 +23,7 @@
  * Actual implementation of the interface
  */
 @implementation PowerManagement
-- (void) wakeLock:(CDVInvokedUrlCommand*)command
+- (void) setWakeLock:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* result = nil;
     NSString* jsString = nil;
@@ -64,7 +64,7 @@
     [self writeJavascript:jsString];
 }
 
-- (void) dimScreen:(CDVInvokedUrlCommand*)command
+- (void) setBrightness:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* result = nil;
     NSString* callbackId = command.callbackId;
