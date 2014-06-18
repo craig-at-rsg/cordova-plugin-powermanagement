@@ -61,7 +61,7 @@ public class PowerManagement extends CordovaPlugin {
 		Log.d("PowerManagementPlugin", "Action is: " + action);
 
 		try {
-			if (action == "setWakeLock") {
+			if (action.equals("setWakeLock")) {
 				if (args.getBoolean(0)) { 		// first parameter determines if we're acquiring or releasing
 					if(args.getBoolean(1)) {	// second parameter determines if we should get a dim-lock (instead of full-wake)
 						Log.d("PowerManagementPlugin", "Acquiring dim lock");
@@ -77,7 +77,7 @@ public class PowerManagement extends CordovaPlugin {
 					result = this.release();
 				}
 			}
-			else if (action == "setBrightness") {
+			else if (action.equals("setBrightness")) {
 				// to do...
 				result = new PluginResult(PluginResult.Status.INVALID_ACTION, "Not yet implemented...");
 			}
